@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistem Informasi Manajemen Jadwal BAP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0b2341;
+      --card: #122b54;
+      --soft: #1e3a5f;
+      --text: #f9fafb;
+      --muted: #d1d5db;
+      --brand: #fbbf24;
+      --brand-light: #fcd34d;
+      --brand-dark: #f59e0b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --transition: all 0.3s ease;
+      --transition-slow: all 0.5s ease;
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0b2341 0%, #122b54 50%, #1e3a5f 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Header Styles */
+    header {
+      background: rgba(11, 35, 65, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--brand);
+      padding: 15px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    header.scrolled {
+      padding: 10px 5%;
+      background: rgba(11, 35, 65, 0.98);
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-row img {
+      height: 50px;
+      transition: var(--transition);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    
+    .logo-row img:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+    
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--brand);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    
+    /* Navigation */
+    nav {
+      display: flex;
+      gap: 8px;
+    }
+    
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      background: var(--soft);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    nav a:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: var(--transition-slow);
+    }
+    
+    nav a:hover:before {
+      left: 100%;
+    }
+    
+    nav a:hover {
+      background: var(--brand);
+      color: #0b2341;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+    }
+    
+    nav a.active {
+      background: var(--brand);
+      color: #0b2341;
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+    
+    .mobile-menu-btn:hover {
+      background: var(--soft);
+    }
+    
+    /* Main Content */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 60px 0;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+    
+    .hero h2 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: var(--brand);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      color: var(--muted);
+    }
+    
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--brand), var(--success));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: var(--transition);
+    }
+    
+    .card:hover:before {
+      transform: scaleX(1);
+    }
+    
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      color: var(--brand);
+      margin-bottom: 15px;
+      transition: var(--transition);
+    }
+    
+    .card:hover .card-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    h2 {
+      color: var(--brand);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    
+    .card ul {
+      list-style: none;
+      padding-left: 0;
+      flex-grow: 1;
+    }
+    
+    .card li {
+      margin-bottom: 12px;
+      padding-left: 25px;
+      position: relative;
+      transition: var(--transition);
+    }
+    
+    .card li:hover {
+      transform: translateX(5px);
+    }
+    
+    .card li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: bold;
+    }
+    
+    /* Buttons */
+    .btn-container {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      justify-content: center;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--brand);
+      color: #0b2341;
+      font-weight: 600;
+      border: none;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 6px rgba(251, 191, 36, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: var(--transition-slow);
+    }
+    
+    .btn:hover:before {
+      left: 100%;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(251, 191, 36, 0.4);
+      background: var(--brand-light);
+    }
+    
+    .btn-secondary {
+      background: var(--soft);
+      color: var(--text);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--card);
+    }
+    
+    /* Stats Section */
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 60px 0;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+      padding: 25px;
+      text-align: center;
+      min-width: 180px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      font-size: 1rem;
+      color: var(--muted);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(11, 35, 65, 0.9);
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .footer-links a:hover {
+      color: var(--brand);
+      transform: translateY(-2px);
+    }
+    
+    /* Floating Elements */
+    .floating {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: rgba(251, 191, 36, 0.1);
+      border-radius: 50%;
+      z-index: -1;
+      animation: float 15s infinite linear;
+    }
+    
+    .floating:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+    
+    .floating:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+    
+    .floating:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 15px;
+      }
+      
+      nav.active {
+        display: flex;
+      }
+      
+      .hero h2 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .logo-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .brand-text {
+        text-align: center;
+      }
+      
+      .btn-container {
+        flex-direction: column;
+      }
+      
+      .btn {
+        justify-content: center;
+      }
+      
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    
+    /* Loading Animation */
+    .loader {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--brand);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background: var(--success);
+      color: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Background Elements -->
+  <div class="floating"></div>
+  <div class="floating"></div>
+  <div class="floating"></div>
+  
+  <header>
+    <div class="logo-container">
+      <div class="logo-row">
+        <img src="logo1.png" alt="Logo 1">
+        <img src="logo2.png" alt="Logo 2">
+      </div>
+      <div class="brand-text">
+        <h1>SI Manajemen Jadwal BAP</h1>
+        <div class="subtitle">Sistem Informasi Terpadu</div>
+      </div>
+    </div>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav id="mainNav">
+      <a href="index.html" class="active"><i class="fas fa-home"></i> Beranda</a>
+      <a href="ajukan.html"><i class="fas fa-calendar-plus"></i> Ajukan Jadwal</a>
+      <a href="status.html"><i class="fas fa-search"></i> Cek Status</a>
+      <a href="admin.html"><i class="fas fa-user-shield"></i> Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero fade-in">
+      <h2>Sistem Informasi Manajemen Jadwal BAP</h2>
+      <p>
+        Sistem Informasi Manajemen Jadwal BAP membantu pengguna untuk 
+        mengajukan jadwal, melihat status, dan admin dalam memverifikasi data 
+        secara <strong>online</strong> dan <strong>terstruktur</strong>.
+      </p>
+      <div class="btn-container">
+        <a class="btn" href="ajukan.html" id="ajukanBtn">
+          <i class="fas fa-plus-circle"></i> Ajukan Jadwal BAP
+        </a>
+        <a class="btn btn-secondary" href="status.html">
+          <i class="fas fa-search"></i> Cek Status
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="stats fade-in delay-1">
+      <div class="stat-card">
+        <div class="stat-number" id="stat1">0</div>
+        <div class="stat-label">Pengajuan Bulan Ini</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat2">0</div>
+        <div class="stat-label">Pengajuan Disetujui</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat3">0</div>
+        <div class="stat-label">Pengguna Terdaftar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat4">0</div>
+        <div class="stat-label">Admin Aktif</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <section class="card fade-in delay-1">
+        <div class="card-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h2>Untuk Pengguna</h2>
+        <ul>
+          <li><strong>Registrasi</strong> akun pengguna</li>
+          <li><strong>Ajukan jadwal</strong> BAP dengan mudah</li>
+          <li><strong>Cek status</strong> pengajuan secara real-time</li>
+          <li><strong>Notifikasi</strong> status pengajuan</li>
+        </ul>
+      </section>
+
+      <section class="card fade-in delay-2">
+        <div class="card-icon">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h2>Untuk Admin</h2>
+        <ul>
+          <li><strong>Verifikasi</strong> data pengajuan</li>
+          <li><strong>Ubah status</strong> pengajuan</li>
+          <li><strong>Atur jadwal</strong> BAP</li>
+          <li><strong>Kelola pengguna</strong> dan akses</li>
+        </ul>
+      </section>
+
+      <section class="card fade-in delay-3">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2>Fitur Unggulan</h2>
+        <ul>
+          <li><strong>Ekspor data</strong> ke Excel/CSV</li>
+          <li><strong>Dashboard</strong> analitik lengkap</li>
+          <li><strong>Pencarian</strong> dan filter data</li>
+          <li><strong>Laporan</strong> otomatis</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div>&copy; 2025 Sistem Informasi BAP. Semua Hak Dilindungi.</div>
+      <div class="footer-links">
+        <a href="#"><i class="fas fa-shield-alt"></i> Kebijakan Privasi</a>
+        <a href="#"><i class="fas fa-file-contract"></i> Syarat & Ketentuan</a>
+        <a href="#"><i class="fas fa-question-circle"></i> Bantuan</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Notification Element -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i> Selamat datang di Sistem Informasi BAP!
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mainNav.classList.toggle('active');
+      const icon = mobileMenuBtn.querySelector('i');
+      if (mainNav.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('nav') && !e.target.closest('.mobile-menu-btn') && window.innerWidth <= 768) {
+        mainNav.classList.remove('active');
+        const icon = mobileMenuBtn.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // Add active class to current page in navigation
+    const currentPage = window.location.pathname.split('/').pop();
+    const navLinks = document.querySelectorAll('nav a');
+    
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+    
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    // Fungsi untuk mengambil data dari localStorage
+    function getBAPData() {
+      try {
+        return JSON.parse(localStorage.getItem('bap_requests') || '[]');
+      } catch {
+        return [];
+      }
+    }
+    
+    // Fungsi untuk menghitung statistik berdasarkan data aktual
+    function calculateStats() {
+      const data = getBAPData();
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+      
+      // Hitung pengajuan bulan ini
+      const pengajuanBulanIni = data.filter(item => {
+        const itemDate = new Date(item.created_at);
+        return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+      }).length;
+      
+      // Hitung pengajuan disetujui
+      const pengajuanDisetujui = data.filter(item => item.status === 'approved' || item.status === 'disetujui').length;
+      
+      // Hitung pengguna unik (berdasarkan nomor HP)
+      const uniqueUsers = new Set(data.map(item => item.nomor_hp)).size;
+      
+      // Admin aktif (default 1 untuk demo)
+      const adminAktif = 1;
+      
+      return {
+        pengajuanBulanIni,
+        pengajuanDisetujui,
+        uniqueUsers,
+        adminAktif
+      };
+    }
+    
+    // Animated stats counter berdasarkan data aktual
+    function animateCounter(element, target, duration = 2000) {
+      let start = 0;
+      const increment = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          element.textContent = target;
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(start);
+        }
+      }, 16);
+    }
+    
+    // Initialize stats when in viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const stats = calculateStats();
+          
+          animateCounter(document.getElementById('stat1'), stats.pengajuanBulanIni);
+          animateCounter(document.getElementById('stat2'), stats.pengajuanDisetujui);
+          animateCounter(document.getElementById('stat3'), stats.uniqueUsers);
+          animateCounter(document.getElementById('stat4'), stats.adminAktif);
+          
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+    
+    observer.observe(document.querySelector('.stats'));
+    
+    // Show notification on page load
+    window.addEventListener('load', () => {
+      const notification = document.getElementById('notification');
+      setTimeout(() => {
+        notification.classList.add('show');
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }, 1000);
+    });
+    
+    // Button loading effect
+    const ajukanBtn = document.getElementById('ajukanBtn');
+    ajukanBtn.addEventListener('click', (e) => {
+      if (!ajukanBtn.querySelector('.loader')) {
+        const originalText = ajukanBtn.innerHTML;
+        ajukanBtn.innerHTML = '<span class="loader"></span> Mengarahkan...';
+        
+        setTimeout(() => {
+          ajukanBtn.innerHTML = originalText;
+        }, 1500);
+      }
+    });
+    
+    // Real-time stat updates (opsional - untuk update otomatis jika ada perubahan data)
+    function updateStats() {
+      const stats = calculateStats();
+      document.getElementById('stat1').textContent = stats.pengajuanBulanIni;
+      document.getElementById('stat2').textContent = stats.pengajuanDisetujui;
+      document.getElementById('stat3').textContent = stats.uniqueUsers;
+      document.getElementById('stat4').textContent = stats.adminAktif;
+    }
+    
+    // Update stats setiap 10 detik (opsional)
+    // setInterval(updateStats, 10000);
+    
+    console.log("Sistem Informasi BAP loaded successfully.");
+  </script>
+</body>
+</html>

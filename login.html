@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Admin BAP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0b2341;
+      --card: #122b54;
+      --soft: #1e3a5f;
+      --text: #f9fafb;
+      --muted: #d1d5db;
+      --brand: #fbbf24;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #60a5fa;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0b2341 0%, #122b54 50%, #1e3a5f 100%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 1000px;
+      gap: 50px;
+    }
+    
+    .login-info {
+      flex: 1;
+      max-width: 400px;
+    }
+    
+    .login-info h1 {
+      font-size: 2.5rem;
+      color: var(--brand);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .login-info p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+    
+    .features {
+      list-style: none;
+      margin-top: 30px;
+    }
+    
+    .features li {
+      margin-bottom: 15px;
+      padding-left: 30px;
+      position: relative;
+    }
+    
+    .features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    
+    /* Card Styles */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 35px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+    
+    .card-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .card-header h2 {
+      color: var(--brand);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .card-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(11, 28, 51, 0.7);
+      color: var(--text);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+    }
+    
+    input::placeholder {
+      color: var(--muted);
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--brand);
+      color: #0b2341;
+      font-weight: 600;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 6px rgba(251, 191, 36, 0.2);
+      font-size: 1rem;
+      width: 100%;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(251, 191, 36, 0.3);
+    }
+    
+    .btn-full {
+      width: 100%;
+    }
+    
+    /* Error Message */
+    .error {
+      color: var(--danger);
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px 15px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    /* Footer */
+    .login-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    /* Back Link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      margin-top: 20px;
+      transition: var(--transition);
+    }
+    
+    .back-link:hover {
+      color: var(--brand);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .login-container {
+        flex-direction: column;
+        gap: 30px;
+      }
+      
+      .login-info {
+        text-align: center;
+        max-width: 100%;
+      }
+      
+      .login-info h1 {
+        font-size: 2rem;
+        justify-content: center;
+      }
+      
+      .card {
+        padding: 25px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .login-info h1 {
+        font-size: 1.8rem;
+      }
+      
+      .login-info p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-info fade-in">
+      <h1><i class="fas fa-user-shield"></i> Admin BAP</h1>
+      <p>Masuk ke panel administrasi untuk mengelola pengajuan jadwal BAP, verifikasi data, dan mengatur jadwal.</p>
+      
+      <ul class="features">
+        <li>Kelola semua pengajuan BAP</li>
+        <li>Verifikasi dan validasi data</li>
+        <li>Atur jadwal dan lokasi BAP</li>
+        <li>Ekspor data ke format Excel</li>
+        <li>Pantau status pengajuan real-time</li>
+      </ul>
+      
+      <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+      </a>
+    </div>
+    
+    <div class="card fade-in">
+      <div class="card-header">
+        <h2><i class="fas fa-lock"></i> Login Admin</h2>
+        <p>Masukkan kredensial Anda untuk mengakses panel admin</p>
+      </div>
+      
+      <form id="formLogin">
+        <div class="form-group">
+          <label for="username" class="required">Username</label>
+          <div class="input-with-icon">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="username" name="username" required placeholder="Masukkan username admin">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password" class="required">Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-key input-icon"></i>
+            <input type="password" id="password" name="password" required placeholder="Masukkan password">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-full">
+          <i class="fas fa-sign-in-alt"></i> Masuk ke Dashboard
+        </button>
+      </form>
+      
+      <div id="errorMsg" class="error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorText"></span>
+      </div>
+      
+      <div class="login-footer">
+        <p><i class="fas fa-info-circle"></i> Hubungi super admin jika lupa kredensial login</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formLogin');
+    const errorMsg = document.getElementById('errorMsg');
+    const errorText = document.getElementById('errorText');
+
+    // Username & password default
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "12345";
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const user = data.get('username');
+      const pass = data.get('password');
+
+      // Reset error state
+      errorMsg.style.display = 'none';
+      
+      // Basic validation
+      if (!user || !pass) {
+        showError("Harap isi username dan password");
+        return;
+      }
+
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        // Simpan status login
+        sessionStorage.setItem('isAdmin', 'true');
+        sessionStorage.setItem('adminLoginTime', new Date().toISOString());
+        
+        // Tampilkan pesan sukses sebelum redirect
+        showSuccess("Login berhasil! Mengarahkan ke dashboard...");
+        
+        // Redirect setelah delay singkat
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 1000);
+      } else {
+        showError("Username atau password salah!");
+      }
+    });
+
+    function showError(message) {
+      errorText.textContent = message;
+      errorMsg.style.display = 'flex';
+      
+      // Add shake animation to form
+      form.classList.add('shake');
+      setTimeout(() => {
+        form.classList.remove('shake');
+      }, 500);
+    }
+    
+    function showSuccess(message) {
+      errorText.textContent = message;
+      errorMsg.style.display = 'flex';
+      errorMsg.style.background = 'rgba(16, 185, 129, 0.1)';
+      errorMsg.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+      errorMsg.style.color = 'var(--success)';
+    }
+
+    // Add shake animation style
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+      .shake {
+        animation: shake 0.3s ease-in-out;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Focus on username field when page loads
+    window.addEventListener('load', () => {
+      document.getElementById('username').focus();
+    });
+    
+    // Check if user is already logged in
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('isAdmin') === 'true') {
+        // Optional: Redirect to admin page if already logged in
+        // window.location.href = "admin.html";
+      }
+    });
+  </script>
+</body>
+</html>
